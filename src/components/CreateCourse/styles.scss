@@ -1,0 +1,51 @@
+.container {
+    margin: 10px 5px;
+    border: 2px solid blue;
+    padding: 10px;
+    max-height: 80vh;
+
+    textarea {
+        width: calc(100% - 8px);
+        height: 10vh;
+        border: 2px solid yellow;
+    }
+    
+    p {
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+
+    .book-info {
+        display: flex;
+        justify-content: space-between;
+        border: 2px solid black;
+        margin-top: 10px;
+        padding: 10px;
+
+        .info-heading{
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .add-author {
+            width: 50%;
+         
+            input {
+                width: 90%;
+            }
+
+            button {
+                margin: 0 auto;
+                display: block;
+            }
+
+        }
+    }
+}
+
+.title-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
