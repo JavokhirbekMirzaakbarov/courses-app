@@ -18,9 +18,9 @@ export default function CourseCard(props: {
 		setAuthors(
 			props.authors.filter((author) => props.course.authors.includes(author.id))
 		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// overflow-hidden white-space nowrap text-overflow: elipses
 	return (
 		<div className='course-card'>
 			<div className='title'>
