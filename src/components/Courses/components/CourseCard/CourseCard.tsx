@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Button from '../../../../common/Button/Button';
 import { Author, Course } from '../../../../constants';
-import { formatCreationDate } from '../../../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
 import './CourseCard.scss';
 
@@ -40,7 +39,7 @@ export default function CourseCard(props: {
 				</div>
 				<div>
 					<b>Created: </b>
-					<span>{formatCreationDate(props.course.creationDate)}</span>
+					<span>{props.course.creationDate}</span>
 				</div>
 				<Button btnText='Show course' onClick={() => {}} />
 			</div>
