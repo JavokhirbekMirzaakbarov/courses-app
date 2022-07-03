@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Button from '../../../../common/Button/Button';
 import { Author, Course } from '../../../../constants';
+import { getAllAuthors } from '../../../../helpers/getAuthorData';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
 import './CourseCard.scss';
 
-export default function CourseCard(props: {
-	course: Course;
-	authors: Author[];
-}) {
+export default function CourseCard(props: { course: Course }) {
 	const [courseDuration, setDuration] = useState('');
 	const [courseAuthors, setAuthors] = useState<Author[]>([]);
+	const authors = getAllAuthors();
 
 	useEffect(() => {
 		setDuration(() => getCourseDuration(props.course.duration));
 
 		setAuthors(
-			props.authors.filter((author) => props.course.authors.includes(author.id))
+			authors.filter((author) => props.course.authors.includes(author.id))
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

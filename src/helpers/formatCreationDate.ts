@@ -1,7 +1,17 @@
+import { stringify } from 'querystring';
+
 export function formatCreationDate(date: any) {
-	const day = date.getDate();
-	const month = date.getMonth();
+	let day = date.getDate();
+	let month = date.getMonth();
 	const year = date.getFullYear();
 
-	return `${day}/${month}/${year}`;
+	if (day < 10) {
+		day = `0${day}`;
+	}
+
+	if (month < 10) {
+		month = `0${month}`;
+	}
+
+	return `${day}.${month}.${year}`;
 }

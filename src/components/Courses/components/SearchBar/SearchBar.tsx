@@ -14,7 +14,7 @@ export default function SearchBar(props: {
 	return (
 		<form onSubmit={handleSearch}>
 			<Input
-				placeholder='Enter course name'
+				placeholder='Enter course name or id...'
 				name='search'
 				value={search}
 				onChange={(e: any) => {

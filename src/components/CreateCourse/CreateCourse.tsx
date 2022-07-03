@@ -1,44 +1,52 @@
-import React, { useEffect, useId, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import { Author, Course } from '../../constants';
 import { formatCreationDate } from '../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import AuthorItem from './components/AuthorItem/AuthorItem';
+import { addCourse } from '../../helpers/getCourseData';
+import { addAuthor } from '../../helpers/getAuthorData';
+import { getAllAuthors } from '../../helpers/getAuthorData';
 import './styles.scss';
 
 export default function CreateCourse(props: {
-	createCourse: () => void;
-	authors: Author[];
-	addAuthor: (a: Author) => void;
-	addCourse: (c: Course) => void;
+	toggleCreateCourse: () => void;
 }) {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
-	const [duration, setDuration] = useState(0);
+	const [duration, setDuration] = useState<number>(0);
 	const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
-	const [otherAuthors, setOtherAuthors] = useState<Author[]>(props.authors);
+	const [otherAuthors, setOtherAuthors] = useState<Author[]>(getAllAuthors());
 
-	const handleSubmit = (e: any) => {
-		let authorsWithOnlyIDs = courseAuthors.map((author) => author.id);
-		const newCourse = {
-			id: generateId(),
-			title,
-			description,
-			duration,
-			authors: authorsWithOnlyIDs,
-			creationDate: formatCreationDate(new Date()),
-		};
-		props.addCourse(newCourse);
+	const handleSubmit = () => {
+		if (
+			title.length < 2 &&
+			description.length < 2 &&
+			courseAuthors.length < 1 &&
+			duration <= 0
+		) {
+			alert('Invalid input! Try again!');
+		} else {
+			let authorsWithOnlyIDs = courseAuthors.map((author) => author.id);
+			const newCourse = {
+				id: generateId(),
+				title,
+				description,
+				duration,
+				authors: authorsWithOnlyIDs,
+				creationDate: formatCreationDate(new Date()),
+			};
+
+			addCourse(newCourse);
+			props.toggleCreateCourse();
+			setTitle('');
+			setDescription('');
+			setDuration(0);
+			setCourseAuthors([]);
+		}
 	};
-
-	useEffect(() => {
-		const rem = props.authors.filter(
-			(author) => !courseAuthors.includes(author)
-		);
-		setOtherAuthors(rem);
-	}, [props.authors]);
 
 	const generateId = () => {
 		const id = Math.floor(Math.random() * 100 + 1);
@@ -53,12 +61,12 @@ export default function CreateCourse(props: {
 				id: generateId(),
 				name: authorName,
 			};
-			props.addAuthor(newAuthor);
+			addAuthor(newAuthor);
 			setAuthorName('');
 		}
 	};
 
-	const deleteAuthor = (authorId: string) => {
+	const deleteAuthorFromCourseAuthors = (authorId: string) => {
 		setCourseAuthors(courseAuthors.filter((author) => author.id !== authorId));
 		let deletedAuthor = courseAuthors.filter(
 			(author) => author.id === authorId
@@ -66,14 +74,14 @@ export default function CreateCourse(props: {
 		setOtherAuthors((prev: any) => [...prev, ...deletedAuthor]);
 	};
 
-	const addAuthor = (authorId: string) => {
-		const newAuthor = props.authors.filter((author) => author.id === authorId);
-		setCourseAuthors((prev) => [...prev, ...newAuthor]);
+	const addToCourseAuthors = (authorId: string) => {
+		const newAuthor = otherAuthors.filter((author) => author.id === authorId);
+		setCourseAuthors([...courseAuthors, ...newAuthor]);
 		setOtherAuthors((prev) => prev.filter((author) => author.id !== authorId));
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className='container'>
+		<form className='container'>
 			<div className='title-area'>
 				<div>
 					<Input
@@ -84,7 +92,18 @@ export default function CreateCourse(props: {
 						minLength={2}
 					/>
 				</div>
-				<button type='submit'>Create Course</button>
+				<div>
+					<Button
+						type='button'
+						btnText='Create Course'
+						onClick={handleSubmit}
+					/>
+					<Button
+						type='button'
+						btnText='Back to Courses'
+						onClick={props.toggleCreateCourse}
+					/>
+				</div>
 			</div>
 			<p>Description</p>
 			<textarea
@@ -105,7 +124,11 @@ export default function CreateCourse(props: {
 						onChange={(e: any) => setAuthorName(e.target.value)}
 						placeholder='Enter author name ...'
 					/>
-					<Button btnText='Create Author' onClick={createAuthor} />
+					<Button
+						type='button'
+						btnText='Create Author'
+						onClick={createAuthor}
+					/>
 					<p className='info-heading'>Duration</p>
 					<Input
 						value={duration}
@@ -122,7 +145,7 @@ export default function CreateCourse(props: {
 							btnText='Add author'
 							key={auth.id}
 							author={auth}
-							onClick={addAuthor}
+							onClick={addToCourseAuthors}
 						/>
 					))}
 
@@ -132,7 +155,7 @@ export default function CreateCourse(props: {
 							btnText='Delete author'
 							key={auth.id}
 							author={auth}
-							onClick={deleteAuthor}
+							onClick={deleteAuthorFromCourseAuthors}
 						/>
 					))}
 				</div>

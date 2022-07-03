@@ -5,7 +5,7 @@ import './AuthorItem.scss';
 
 export default function AuthorItem(props: {
 	author: Author;
-	onClick: (a: string) => void;
+	onClick: (a: any) => void;
 	btnText: string;
 }) {
 	return (
