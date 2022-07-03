@@ -1,5 +1,3 @@
-import { stringify } from 'querystring';
-
 export function formatCreationDate(date: any) {
 	let day = date.getDate();
 	let month = date.getMonth();

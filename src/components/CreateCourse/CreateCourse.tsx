@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-import { Author, Course } from '../../constants';
+import { Author } from '../../constants';
 import { formatCreationDate } from '../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import AuthorItem from './components/AuthorItem/AuthorItem';
