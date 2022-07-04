@@ -29,22 +29,17 @@ export default function CreateCourse(props: {
 		) {
 			alert('Invalid input! Try again!');
 		} else {
-			let authorsWithOnlyIDs = courseAuthors.map((author) => author.id);
 			const newCourse = {
 				id: generateId(),
 				title,
 				description,
 				duration,
-				authors: authorsWithOnlyIDs,
+				authors: courseAuthors.map((author) => author.id),
 				creationDate: formatCreationDate(new Date()),
 			};
 
 			addCourse(newCourse);
 			props.toggleCreateCourse();
-			setTitle('');
-			setDescription('');
-			setDuration(0);
-			setCourseAuthors([]);
 		}
 	};
 
