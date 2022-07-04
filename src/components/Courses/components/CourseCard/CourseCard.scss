@@ -1,0 +1,32 @@
+.course-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 200px;
+    border: 2px solid green;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 10px;
+
+    .info {
+        width: 25%;
+    }
+
+    .title {
+        width: 50%;
+    }
+
+    .authors {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .author-list {
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
