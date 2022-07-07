@@ -24,6 +24,7 @@ export default function CourseInfo() {
 	useEffect(() => {
 		getCourse(courseId!);
 		getAuthors();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

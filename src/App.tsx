@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/Header/Header';
 import Courses from './components/Courses/Courses';
 import CreateCourse from './components/CreateCourse/CreateCourse';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
@@ -23,7 +23,6 @@ function App() {
 	useEffect(() => {
 		checkForToken();
 	}, []);
-	// if (!token) navigate('/courses');
 
 	return (
 		<BrowserRouter>
