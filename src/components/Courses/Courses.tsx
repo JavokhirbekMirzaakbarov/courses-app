@@ -5,10 +5,12 @@ import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import { getAllCourses } from '../../helpers/getCourseData';
 import './Courses.scss';
+import { useNavigate } from 'react-router-dom';
 
-export default function Courses(props: { toggleCreateCourse: () => void }) {
+export default function Courses() {
 	const allCourses = getAllCourses();
 	const [courses, setCourses] = useState<Course[]>(allCourses);
+	const navigate = useNavigate();
 
 	const searchCourse = (term: string) => {
 		setCourses(
@@ -27,7 +29,7 @@ export default function Courses(props: { toggleCreateCourse: () => void }) {
 				<Button
 					type='button'
 					btnText='Add new course'
-					onClick={props.toggleCreateCourse}
+					onClick={() => navigate('/courses/add')}
 				/>
 			</div>
 
