@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
+import { registerUser } from '../../services/service';
 import './styles.scss';
 
 export default function Registration() {
@@ -10,37 +11,26 @@ export default function Registration() {
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
 
-	const registerUser = async (e: any) => {
+	const register = async (e: any) => {
 		e.preventDefault();
-		const newUser = {
-			name,
-			email,
-			password,
-		};
-
-		const response = await fetch('http://localhost:4000/register', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(newUser),
-		});
-		const data: {
-			successful: Boolean;
-			errors?: String[];
-			result?: String;
-		} = await response.json();
-
-		if (data.successful) {
-			alert(data.result);
-			navigate('/login');
+		if (!name && !email && !password) {
+			alert('Invalid input! Try again!');
+			setName('');
+			setEmail('');
+			setPassword('');
 		} else {
-			alert(data.errors);
+			const response: any = await registerUser({ name, email, password });
+			if (response.status === 200) {
+				alert(JSON.stringify(response.data.result));
+				navigate('/login');
+			} else {
+				alert(JSON.stringify(response.errors));
+			}
 		}
 	};
 
 	return (
-		<form className='registration' onSubmit={registerUser}>
+		<form className='registration' onSubmit={register}>
 			<h2>Registration</h2>
 			<Input
 				label='Name'

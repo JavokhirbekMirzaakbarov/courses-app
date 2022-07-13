@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../../common/Button/Button';
 import { Author, Course } from '../../../../constants';
 import { getAllAuthors } from '../../../../helpers/getAuthorData';
@@ -9,6 +10,7 @@ export default function CourseCard(props: { course: Course }) {
 	const [courseDuration, setDuration] = useState('');
 	const [courseAuthors, setAuthors] = useState<Author[]>([]);
 	const authors = getAllAuthors();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		setDuration(() => getCourseDuration(props.course.duration));
@@ -19,6 +21,7 @@ export default function CourseCard(props: { course: Course }) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const handleClick = (id: string) => navigate(`/courses/${id}`);
 	return (
 		<div className='course-card'>
 			<div className='title'>
@@ -40,7 +43,10 @@ export default function CourseCard(props: { course: Course }) {
 					<b>Created: </b>
 					<span>{props.course.creationDate}</span>
 				</div>
-				<Button btnText='Show course' onClick={() => {}} />
+				<Button
+					btnText='Show course'
+					onClick={() => handleClick(props.course.id)}
+				/>
 			</div>
 		</div>
 	);

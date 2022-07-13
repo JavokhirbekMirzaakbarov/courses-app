@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
+import { loginService } from '../../services/service';
 import './styles.scss';
 
-export default function Login() {
+export default function Login(props: { login: () => any }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -12,33 +13,18 @@ export default function Login() {
 
 	const loginUser = async (e: any) => {
 		e.preventDefault();
-		const newUser = {
-			email,
-			password,
-		};
 
-		const res = await fetch('http://localhost:4000/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(newUser),
-		});
-		const response: {
-			successful: Boolean;
-			errors?: String[];
-			result?: string;
-			user?: {
-				name: string;
-				email: string;
-			};
-		} = await res.json();
+		if (!email || !password) {
+			alert('Invalid input! Try again!');
+		} else {
+			const res: any = await loginService({ email, password });
 
-		if (response.successful) {
-			console.log(response);
-			localStorage.setItem('userToken', response.result!);
-			localStorage.setItem('userName', response.user?.name!);
-			navigate('/courses');
+			if (res.status === 200) {
+				localStorage.setItem('userToken', JSON.stringify(res.result!));
+				localStorage.setItem('userName', JSON.stringify(res.user?.name!));
+				props.login();
+				navigate('/courses');
+			}
 		}
 	};
 
