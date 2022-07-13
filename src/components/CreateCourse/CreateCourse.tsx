@@ -9,10 +9,10 @@ import { addCourse } from '../../helpers/getCourseData';
 import { addAuthor } from '../../helpers/getAuthorData';
 import { getAllAuthors } from '../../helpers/getAuthorData';
 import './styles.scss';
+import { useNavigate } from 'react-router-dom';
 
-export default function CreateCourse(props: {
-	toggleCreateCourse: () => void;
-}) {
+export default function CreateCourse() {
+	const navigate = useNavigate();
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
@@ -39,7 +39,7 @@ export default function CreateCourse(props: {
 			};
 
 			addCourse(newCourse);
-			props.toggleCreateCourse();
+			navigate('/courses');
 		}
 	};
 
@@ -96,7 +96,7 @@ export default function CreateCourse(props: {
 					<Button
 						type='button'
 						btnText='Back to Courses'
-						onClick={props.toggleCreateCourse}
+						onClick={() => navigate('/courses')}
 					/>
 				</div>
 			</div>

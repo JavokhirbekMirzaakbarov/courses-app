@@ -1,0 +1,10 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 5px;
+    border: 2px solid blue;
+    padding: 10px;
+    height: calc(100vh - 119px)
+}
