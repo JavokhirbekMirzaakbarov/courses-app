@@ -9,6 +9,11 @@ export default function Login(props: { login: () => any }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
+	React.useEffect(() => {
+		navigate('/login');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	const navigate = useNavigate();
 
 	const loginUser = async (e: any) => {
