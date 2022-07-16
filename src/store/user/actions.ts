@@ -1,3 +1,10 @@
-export const REGISTER_USER = 'user/REGISTER_USER';
-export const LOGIN_USER = 'user/LOGIN_USER';
-export const LOGOUT_USER = 'user/LOGOUT_USER';
+import { LOGIN_USER, LOGOUT_USER } from './types';
+
+export const loginUserActionCreator = (payload: object) => ({
+	type: LOGIN_USER,
+	payload,
+});
+
+export const logoutUserActionCreator = () => ({
+	type: LOGOUT_USER,
+});

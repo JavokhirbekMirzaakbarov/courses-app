@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../../common/Button/Button';
 import { Author, Course } from '../../../../constants';
-import { getAllAuthors } from '../../../../helpers/getAuthorData';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
+import { getAllAuthorsService } from '../../../../services/service';
+import { setAllAuthorsActionCreator } from '../../../../store/authors/actions';
+import { RiDeleteBin5Line } from 'react-icons/ri';
+import { BsPencil } from 'react-icons/bs';
 import './CourseCard.scss';
+import { deleteCourseActionCreator } from '../../../../store/courses/actions';
 
 export default function CourseCard(props: { course: Course }) {
 	const [courseDuration, setDuration] = useState('');
 	const [courseAuthors, setAuthors] = useState<Author[]>([]);
-	const authors = getAllAuthors();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		setDuration(() => getCourseDuration(props.course.duration));
-
-		setAuthors(
-			authors.filter((author) => props.course.authors.includes(author.id))
-		);
+		async function getAllAuthors() {
+			const res: any = await getAllAuthorsService();
+			setDuration(() => getCourseDuration(props.course.duration));
+			setAuthors(
+				res.filter((author: any) => props.course.authors.includes(author.id))
+			);
+			dispatch(setAllAuthorsActionCreator(res));
+		}
+		getAllAuthors();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleClick = (id: string) => navigate(`/courses/${id}`);
+	const handleDelete = () => {
+		dispatch(deleteCourseActionCreator(props.course.id));
+		navigate('/courses');
+	};
 	return (
 		<div className='course-card'>
 			<div className='title'>
@@ -30,7 +43,7 @@ export default function CourseCard(props: { course: Course }) {
 			</div>
 			<div className='info'>
 				<div className='authors'>
-					<b>Authors: </b>
+					<b>Authors: &nbsp;</b>
 					<div className='author-list'>
 						{courseAuthors.map((auth) => auth.name).join(', ')}
 					</div>
@@ -47,6 +60,12 @@ export default function CourseCard(props: { course: Course }) {
 					btnText='Show course'
 					onClick={() => handleClick(props.course.id)}
 				/>
+				<Button onClick={handleDelete}>
+					<RiDeleteBin5Line />
+				</Button>
+				<Button onClick={() => {}}>
+					<BsPencil />
+				</Button>
 			</div>
 		</div>
 	);

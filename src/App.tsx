@@ -7,35 +7,18 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import './App.css';
+import { useSelector } from 'react-redux';
 
 function App() {
-	const [isLoggedIn, setLoggedIn] = useState(
-		JSON.parse(localStorage.getItem('isLoggedIn')!) || false
-	);
-
-	const logout = () => {
-		localStorage.removeItem('userName');
-		localStorage.removeItem('userToken');
-		setLoggedIn(false);
-	};
-
-	const login = () => {
-		setLoggedIn(true);
-	};
-
-	useEffect(() => {
-		localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
-	}, [isLoggedIn]);
+	const token = localStorage.getItem('userToken');
+	const isLoggedIn = useSelector((state: any) => state.user.isAuth);
 
 	return (
 		<BrowserRouter>
-			<Header isLoggedIn={isLoggedIn} logout={logout} />
+			<Header />
 			<Routes>
-				<Route
-					path='/'
-					element={isLoggedIn ? <Courses /> : <Login login={login} />}
-				/>
-				<Route path='/login' element={<Login login={login} />} />
+				<Route path='/' element={token ? <Courses /> : <Login />} />
+				<Route path='/login' element={<Login />} />
 				<Route path='/register' element={<Registration />} />
 				{isLoggedIn && (
 					<>
@@ -45,7 +28,7 @@ function App() {
 					</>
 				)}
 
-				<Route path='*' element={<Login login={login} />} />
+				<Route path='*' element={<Login />} />
 			</Routes>
 		</BrowserRouter>
 	);

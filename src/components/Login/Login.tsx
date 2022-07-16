@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import { loginService } from '../../services/service';
+import { loginUserActionCreator } from '../../store/user/actions';
 import './styles.scss';
 
-export default function Login(props: { login: () => any }) {
+export default function Login() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const dispatch = useDispatch();
 
 	React.useEffect(() => {
 		navigate('/login');
@@ -26,8 +29,14 @@ export default function Login(props: { login: () => any }) {
 
 			if (res.status === 200) {
 				localStorage.setItem('userToken', JSON.stringify(res.result!));
-				localStorage.setItem('userName', JSON.stringify(res.user?.name!));
-				props.login();
+				dispatch(
+					loginUserActionCreator({
+						isAuth: true,
+						email: res.user.email,
+						name: res.user.name,
+						token: res.result,
+					})
+				);
 				navigate('/courses');
 			}
 		}

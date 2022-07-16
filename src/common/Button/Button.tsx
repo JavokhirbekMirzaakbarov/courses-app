@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import './Button.scss';
 
 export default function Button(props: {
 	type?: 'button' | 'submit';
 	onClick?: (a?: any) => void;
-	btnText: string;
+	btnText?: string;
+	children?: ReactNode;
 }) {
 	return (
 		<button
@@ -13,7 +14,7 @@ export default function Button(props: {
 				props.onClick?.();
 			}}
 		>
-			{props.btnText}
+			{props.btnText || props.children}
 		</button>
 	);
 }

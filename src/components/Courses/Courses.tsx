@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CourseCard from './components/CourseCard/CourseCard';
 import { Course } from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
-import { getAllCourses } from '../../helpers/getCourseData';
-import './Courses.scss';
 import { useNavigate } from 'react-router-dom';
+import { getAllCoursesService } from '../../services/service';
+import './Courses.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAllCoursesActionCreator } from '../../store/courses/actions';
 
 export default function Courses() {
-	const allCourses = getAllCourses();
-	const [courses, setCourses] = useState<Course[]>(allCourses);
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const allCourses = useSelector((state: any) => state.courses);
+	const [courses, setCourses] = useState([]);
+
+	useEffect(() => {
+		async function getCourses() {
+			const res = await getAllCoursesService();
+			setCourses(res);
+			dispatch(setAllCoursesActionCreator(res));
+		}
+		getCourses();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const searchCourse = (term: string) => {
 		setCourses(
 			allCourses.filter(
-				(course) =>
+				(course: Course) =>
 					course.title.toLowerCase().includes(term.toLowerCase()) ||
 					course.id.toLowerCase().includes(term.toLowerCase())
 			)
@@ -33,7 +46,7 @@ export default function Courses() {
 				/>
 			</div>
 
-			{courses.map((course) => (
+			{courses.map((course: Course) => (
 				<CourseCard course={course} key={course.id} />
 			))}
 		</div>

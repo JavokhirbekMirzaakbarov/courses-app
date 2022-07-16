@@ -5,20 +5,22 @@ import { Author } from '../../constants';
 import { formatCreationDate } from '../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import AuthorItem from './components/AuthorItem/AuthorItem';
-import { addCourse } from '../../helpers/getCourseData';
-import { addAuthor } from '../../helpers/getAuthorData';
-import { getAllAuthors } from '../../helpers/getAuthorData';
-import './styles.scss';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { createAuthorActionCreator } from '../../store/authors/actions';
+import { addCourseActionCreator } from '../../store/courses/actions';
+import './styles.scss';
 
 export default function CreateCourse() {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const allAuthors = useSelector((state: any) => state.authors);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
 	const [duration, setDuration] = useState<number>(0);
 	const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
-	const [otherAuthors, setOtherAuthors] = useState<Author[]>(getAllAuthors());
+	const [otherAuthors, setOtherAuthors] = useState<Author[]>(allAuthors);
 
 	const handleSubmit = () => {
 		if (
@@ -38,7 +40,7 @@ export default function CreateCourse() {
 				creationDate: formatCreationDate(new Date()),
 			};
 
-			addCourse(newCourse);
+			dispatch(addCourseActionCreator(newCourse));
 			navigate('/courses');
 		}
 	};
@@ -56,7 +58,7 @@ export default function CreateCourse() {
 				id: generateId(),
 				name: authorName,
 			};
-			addAuthor(newAuthor);
+			dispatch(createAuthorActionCreator(newAuthor));
 			setAuthorName('');
 		}
 	};
