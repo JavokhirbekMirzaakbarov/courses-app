@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Header from './components/Header/Header';
 import Courses from './components/Courses/Courses';
 import CreateCourse from './components/CreateCourse/CreateCourse';
