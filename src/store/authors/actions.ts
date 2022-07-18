@@ -9,7 +9,7 @@ export const setAllAuthorsActionCreator = (authors: any) => ({
 
 export const createAuthorActionCreator = (author: any) => ({
 	type: CREATE_AUTHOR,
-	paylod: {
+	payload: {
 		author,
 	},
 });

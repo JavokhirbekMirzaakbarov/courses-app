@@ -82,3 +82,16 @@ export const getAllAuthorsService = async () => {
 
 	if (data.successful) return data.result;
 };
+
+export const getUserInfoService = async () => {
+	const response = await fetch('http://localhost:4000/users/me', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	const data = await response.json();
+
+	return data.result;
+};

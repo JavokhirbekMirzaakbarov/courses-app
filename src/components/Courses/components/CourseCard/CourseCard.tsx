@@ -1,34 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../../common/Button/Button';
 import { Author, Course } from '../../../../constants';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
-import { getAllAuthorsService } from '../../../../services/service';
-import { setAllAuthorsActionCreator } from '../../../../store/authors/actions';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { BsPencil } from 'react-icons/bs';
-import './CourseCard.scss';
 import { deleteCourseActionCreator } from '../../../../store/courses/actions';
+import './CourseCard.scss';
 
 export default function CourseCard(props: { course: Course }) {
 	const [courseDuration, setDuration] = useState('');
 	const [courseAuthors, setAuthors] = useState<Author[]>([]);
+	const allAuthors: Author[] = useSelector((store: any) => store.authors);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
-	useEffect(() => {
-		async function getAllAuthors() {
-			const res: any = await getAllAuthorsService();
-			setDuration(() => getCourseDuration(props.course.duration));
-			setAuthors(
-				res.filter((author: any) => props.course.authors.includes(author.id))
-			);
-			dispatch(setAllAuthorsActionCreator(res));
-		}
-		getAllAuthors();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	const handleClick = (id: string) => navigate(`/courses/${id}`);
 	const handleDelete = () => {
@@ -45,12 +31,15 @@ export default function CourseCard(props: { course: Course }) {
 				<div className='authors'>
 					<b>Authors: &nbsp;</b>
 					<div className='author-list'>
-						{courseAuthors.map((auth) => auth.name).join(', ')}
+						{allAuthors
+							.filter((auth) => props.course.authors.includes(auth.id))
+							.map((auth) => auth.name)
+							.join(', ')}
 					</div>
 				</div>
 				<div>
 					<b>Duration: </b>
-					<span>{courseDuration}</span>
+					<span>{getCourseDuration(props.course.duration)}</span>
 				</div>
 				<div>
 					<b>Created: </b>

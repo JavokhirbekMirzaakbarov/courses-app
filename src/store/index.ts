@@ -1,20 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { Author, Course, User } from '../constants';
 import { rootReducer } from './rootReducer';
 
-export const initialState: {
-	user?: User;
-	courses?: Course[];
-	authors?: Author[];
-} = {
+export const initialState: any = {
 	user: {
-		isAuth: false,
-		name: '',
-		email: '',
+		isAuth: localStorage.getItem('userToken') ? true : false,
+		name: localStorage.getItem('userName') || '',
+		email: localStorage.getItem('userEmail') || '',
 		token: localStorage.getItem('userToken') || '',
 	},
-	courses: []!,
-	authors: []!,
+	courses: [],
+	authors: [],
 };
 
 export const store = configureStore({

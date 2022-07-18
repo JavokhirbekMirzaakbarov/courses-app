@@ -9,12 +9,13 @@ import './Header.scss';
 export default function Header() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const isLoggedIn = useSelector((state: any) => state.user.isAuth);
-	const name = useSelector((state: any) => state.user.name);
+	const { isAuth, name } = useSelector((state: any) => state.user);
 
 	const logout = () => {
 		dispatch(logoutUserActionCreator());
 		localStorage.removeItem('userToken');
+		localStorage.removeItem('userName');
+		localStorage.removeItem('userEmail');
 		navigate('/login');
 	};
 
@@ -23,7 +24,7 @@ export default function Header() {
 			<Logo />
 
 			<div>
-				{isLoggedIn && (
+				{isAuth && (
 					<>
 						<span>{name}</span>
 						<Button btnText='Logout' onClick={logout} />

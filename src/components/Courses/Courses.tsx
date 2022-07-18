@@ -12,21 +12,11 @@ import { setAllCoursesActionCreator } from '../../store/courses/actions';
 export default function Courses() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const allCourses = useSelector((state: any) => state.courses);
-	const [courses, setCourses] = useState([]);
-
-	useEffect(() => {
-		async function getCourses() {
-			const res = await getAllCoursesService();
-			setCourses(res);
-			dispatch(setAllCoursesActionCreator(res));
-		}
-		getCourses();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const allCourses = useSelector((store: any) => store.courses);
+	const [searchResults, setSearchResults] = useState<Course[]>(allCourses);
 
 	const searchCourse = (term: string) => {
-		setCourses(
+		setSearchResults(
 			allCourses.filter(
 				(course: Course) =>
 					course.title.toLowerCase().includes(term.toLowerCase()) ||
@@ -46,7 +36,10 @@ export default function Courses() {
 				/>
 			</div>
 
-			{courses.map((course: Course) => (
+			{/* {searchResults.map((course: Course) => (
+				<CourseCard course={course} key={course.id} />
+			)) && */}
+			{searchResults.map((course: Course) => (
 				<CourseCard course={course} key={course.id} />
 			))}
 		</div>

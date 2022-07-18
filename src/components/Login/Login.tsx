@@ -28,7 +28,10 @@ export default function Login() {
 			const res: any = await loginService({ email, password });
 
 			if (res.status === 200) {
-				localStorage.setItem('userToken', JSON.stringify(res.result!));
+				localStorage.setItem('userToken', res.result!);
+				localStorage.setItem('userName', res.user.name!);
+				localStorage.setItem('userEmail', res.user.email!);
+
 				dispatch(
 					loginUserActionCreator({
 						isAuth: true,
