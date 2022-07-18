@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../../common/Button/Button';
@@ -10,8 +10,6 @@ import { deleteCourseActionCreator } from '../../../../store/courses/actions';
 import './CourseCard.scss';
 
 export default function CourseCard(props: { course: Course }) {
-	const [courseDuration, setDuration] = useState('');
-	const [courseAuthors, setAuthors] = useState<Author[]>([]);
 	const allAuthors: Author[] = useSelector((store: any) => store.authors);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();

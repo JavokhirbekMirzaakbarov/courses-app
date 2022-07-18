@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CourseCard from './components/CourseCard/CourseCard';
 import { Course } from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import { useNavigate } from 'react-router-dom';
-import { getAllCoursesService } from '../../services/service';
+import { useSelector } from 'react-redux';
 import './Courses.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAllCoursesActionCreator } from '../../store/courses/actions';
 
 export default function Courses() {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const allCourses = useSelector((store: any) => store.courses);
 	const [searchResults, setSearchResults] = useState<Course[]>(allCourses);
@@ -36,9 +33,6 @@ export default function Courses() {
 				/>
 			</div>
 
-			{/* {searchResults.map((course: Course) => (
-				<CourseCard course={course} key={course.id} />
-			)) && */}
 			{searchResults.map((course: Course) => (
 				<CourseCard course={course} key={course.id} />
 			))}

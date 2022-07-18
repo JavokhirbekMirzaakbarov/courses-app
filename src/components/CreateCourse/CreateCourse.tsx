@@ -20,7 +20,6 @@ export default function CreateCourse() {
 	const [authorName, setAuthorName] = useState('');
 	const [duration, setDuration] = useState<number>(0);
 	const [courseAuthors, setCourseAuthors] = useState<string[]>([]);
-	const [otherAuthors, setOtherAuthors] = useState<Author[]>(allAuthors);
 
 	const handleSubmit = () => {
 		if (
