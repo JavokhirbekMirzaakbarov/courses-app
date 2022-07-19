@@ -33,9 +33,13 @@ export default function Courses() {
 				/>
 			</div>
 
-			{searchResults.map((course: Course) => (
-				<CourseCard course={course} key={course.id} />
-			))}
+			{searchResults.length === 0
+				? allCourses.map((course: Course) => (
+						<CourseCard course={course} key={course.id} />
+				  ))
+				: searchResults.map((course: Course) => (
+						<CourseCard course={course} key={course.id} />
+				  ))}
 		</div>
 	);
 }
