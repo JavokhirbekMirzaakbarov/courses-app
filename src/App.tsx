@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Header from './components/Header/Header';
 import Courses from './components/Courses/Courses';
 import CreateCourse from './components/CreateCourse/CreateCourse';
@@ -7,37 +7,36 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllAuthorsService, getAllCoursesService } from './services/service';
+import { setAllCoursesActionCreator } from './store/courses/actions';
+import { setAllAuthorsActionCreator } from './store/authors/actions';
 
 function App() {
-	const [isLoggedIn, setLoggedIn] = useState(
-		JSON.parse(localStorage.getItem('isLoggedIn')!) || false
-	);
+	const isAuth = useSelector((state: any) => state.user.isAuth);
+	const dispatch = useDispatch();
 
-	const logout = () => {
-		localStorage.removeItem('userName');
-		localStorage.removeItem('userToken');
-		setLoggedIn(false);
-	};
+	async function getData() {
+		const courses = await getAllCoursesService();
+		dispatch(setAllCoursesActionCreator(courses));
 
-	const login = () => {
-		setLoggedIn(true);
-	};
+		const res: any = await getAllAuthorsService();
+		dispatch(setAllAuthorsActionCreator(res));
+	}
 
 	useEffect(() => {
-		localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
-	}, [isLoggedIn]);
+		getData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<BrowserRouter>
-			<Header isLoggedIn={isLoggedIn} logout={logout} />
+			<Header />
 			<Routes>
-				<Route
-					path='/'
-					element={isLoggedIn ? <Courses /> : <Login login={login} />}
-				/>
-				<Route path='/login' element={<Login login={login} />} />
+				<Route path='/' element={isAuth ? <Courses /> : <Login />} />
+				<Route path='/login' element={<Login />} />
 				<Route path='/register' element={<Registration />} />
-				{isLoggedIn && (
+				{isAuth && (
 					<>
 						<Route path='/courses' element={<Courses />} />
 						<Route path='/courses/add' element={<CreateCourse />} />
@@ -45,7 +44,7 @@ function App() {
 					</>
 				)}
 
-				<Route path='*' element={<Login login={login} />} />
+				<Route path='*' element={<Login />} />
 			</Routes>
 		</BrowserRouter>
 	);

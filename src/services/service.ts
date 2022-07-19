@@ -56,3 +56,42 @@ export const loginService = async (user: {
 		};
 	}
 };
+
+export const getAllCoursesService = async () => {
+	const response = await fetch('http://localhost:4000/courses/all', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	const data = await response.json();
+
+	return data.result;
+};
+
+export const getAllAuthorsService = async () => {
+	const response = await fetch('http://localhost:4000/authors/all', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	const data = await response.json();
+
+	if (data.successful) return data.result;
+};
+
+export const getUserInfoService = async () => {
+	const response = await fetch('http://localhost:4000/users/me', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	const data = await response.json();
+
+	return data.result;
+};

@@ -5,20 +5,21 @@ import { Author } from '../../constants';
 import { formatCreationDate } from '../../helpers/formatCreationDate';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import AuthorItem from './components/AuthorItem/AuthorItem';
-import { addCourse } from '../../helpers/getCourseData';
-import { addAuthor } from '../../helpers/getAuthorData';
-import { getAllAuthors } from '../../helpers/getAuthorData';
-import './styles.scss';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { createAuthorActionCreator } from '../../store/authors/actions';
+import { addCourseActionCreator } from '../../store/courses/actions';
+import './styles.scss';
 
 export default function CreateCourse() {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const allAuthors: Author[] = useSelector((state: any) => state.authors);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
 	const [duration, setDuration] = useState<number>(0);
-	const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
-	const [otherAuthors, setOtherAuthors] = useState<Author[]>(getAllAuthors());
+	const [courseAuthors, setCourseAuthors] = useState<string[]>([]);
 
 	const handleSubmit = () => {
 		if (
@@ -34,11 +35,11 @@ export default function CreateCourse() {
 				title,
 				description,
 				duration,
-				authors: courseAuthors.map((author) => author.id),
+				authors: courseAuthors,
 				creationDate: formatCreationDate(new Date()),
 			};
 
-			addCourse(newCourse);
+			dispatch(addCourseActionCreator(newCourse));
 			navigate('/courses');
 		}
 	};
@@ -56,23 +57,17 @@ export default function CreateCourse() {
 				id: generateId(),
 				name: authorName,
 			};
-			addAuthor(newAuthor);
+			dispatch(createAuthorActionCreator(newAuthor));
 			setAuthorName('');
 		}
 	};
 
 	const deleteAuthorFromCourseAuthors = (authorId: string) => {
-		setCourseAuthors(courseAuthors.filter((author) => author.id !== authorId));
-		let deletedAuthor = courseAuthors.filter(
-			(author) => author.id === authorId
-		);
-		setOtherAuthors((prev: any) => [...prev, ...deletedAuthor]);
+		setCourseAuthors(courseAuthors.filter((author) => author !== authorId));
 	};
 
 	const addToCourseAuthors = (authorId: string) => {
-		const newAuthor = otherAuthors.filter((author) => author.id === authorId);
-		setCourseAuthors([...courseAuthors, ...newAuthor]);
-		setOtherAuthors((prev) => prev.filter((author) => author.id !== authorId));
+		setCourseAuthors((prev) => [...prev, authorId]);
 	};
 
 	return (
@@ -135,24 +130,30 @@ export default function CreateCourse() {
 				<div className='authors'>
 					<p className='info-heading'>Authors</p>
 
-					{otherAuthors.map((auth) => (
-						<AuthorItem
-							btnText='Add author'
-							key={auth.id}
-							author={auth}
-							onClick={addToCourseAuthors}
-						/>
-					))}
+					{allAuthors.map(
+						(auth) =>
+							!courseAuthors.includes(auth.id) && (
+								<AuthorItem
+									btnText='Add author'
+									key={auth.id}
+									author={auth}
+									onClick={addToCourseAuthors}
+								/>
+							)
+					)}
 
 					<p className='info-heading'>Course Authors</p>
-					{courseAuthors.map((auth) => (
-						<AuthorItem
-							btnText='Delete author'
-							key={auth.id}
-							author={auth}
-							onClick={deleteAuthorFromCourseAuthors}
-						/>
-					))}
+					{allAuthors.map(
+						(auth) =>
+							courseAuthors.includes(auth.id) && (
+								<AuthorItem
+									btnText='Delete author'
+									key={auth.id}
+									author={auth}
+									onClick={deleteAuthorFromCourseAuthors}
+								/>
+							)
+					)}
 				</div>
 			</div>
 		</form>

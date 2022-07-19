@@ -3,19 +3,19 @@ import CourseCard from './components/CourseCard/CourseCard';
 import { Course } from '../../constants';
 import Button from '../../common/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
-import { getAllCourses } from '../../helpers/getCourseData';
-import './Courses.scss';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import './Courses.scss';
 
 export default function Courses() {
-	const allCourses = getAllCourses();
-	const [courses, setCourses] = useState<Course[]>(allCourses);
 	const navigate = useNavigate();
+	const allCourses = useSelector((store: any) => store.courses);
+	const [searchResults, setSearchResults] = useState<Course[]>([]);
 
 	const searchCourse = (term: string) => {
-		setCourses(
+		setSearchResults(
 			allCourses.filter(
-				(course) =>
+				(course: Course) =>
 					course.title.toLowerCase().includes(term.toLowerCase()) ||
 					course.id.toLowerCase().includes(term.toLowerCase())
 			)
@@ -33,9 +33,15 @@ export default function Courses() {
 				/>
 			</div>
 
-			{courses.map((course) => (
-				<CourseCard course={course} key={course.id} />
-			))}
+			{searchResults.length === 0
+				? allCourses.map((course: Course) => (
+						<CourseCard course={course} key={course.id} />
+				  ))
+				: allCourses
+						.filter((course: Course) => searchResults.includes(course))
+						.map((course: any) => (
+							<CourseCard course={course} key={course.id} />
+						))}
 		</div>
 	);
 }
