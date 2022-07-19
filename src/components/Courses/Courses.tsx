@@ -10,7 +10,7 @@ import './Courses.scss';
 export default function Courses() {
 	const navigate = useNavigate();
 	const allCourses = useSelector((store: any) => store.courses);
-	const [searchResults, setSearchResults] = useState<Course[]>(allCourses);
+	const [searchResults, setSearchResults] = useState<Course[]>([]);
 
 	const searchCourse = (term: string) => {
 		setSearchResults(
@@ -37,9 +37,11 @@ export default function Courses() {
 				? allCourses.map((course: Course) => (
 						<CourseCard course={course} key={course.id} />
 				  ))
-				: searchResults.map((course: Course) => (
-						<CourseCard course={course} key={course.id} />
-				  ))}
+				: allCourses
+						.filter((course: Course) => searchResults.includes(course))
+						.map((course: any) => (
+							<CourseCard course={course} key={course.id} />
+						))}
 		</div>
 	);
 }
