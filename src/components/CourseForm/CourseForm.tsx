@@ -11,7 +11,7 @@ import { createAuthorActionCreator } from '../../store/authors/actions';
 import { addCourseActionCreator } from '../../store/courses/actions';
 import './styles.scss';
 
-export default function CreateCourse() {
+export default function CourseForm() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const allAuthors: Author[] = useSelector((state: any) => state.authors);

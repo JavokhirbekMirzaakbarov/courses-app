@@ -29,14 +29,10 @@ export default function Login() {
 
 			if (res.status === 200) {
 				localStorage.setItem('userToken', res.result!);
-				localStorage.setItem('userName', res.user.name!);
-				localStorage.setItem('userEmail', res.user.email!);
 
 				dispatch(
 					loginUserActionCreator({
 						isAuth: true,
-						email: res.user.email,
-						name: res.user.name,
 						token: res.result,
 					})
 				);
