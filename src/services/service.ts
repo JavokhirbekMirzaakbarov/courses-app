@@ -88,13 +88,11 @@ export const getUserInfoService = async () => {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: JSON.stringify(
-				localStorage.getItem('userToken')?.replace('Bearer ', '')
-			),
+			Authorization: `${localStorage.getItem('userToken')}`,
 		},
 	});
 
 	const data = await response.json();
-	console.log(data.result);
+	console.log(localStorage.getItem('userToken'));
 	return data.result;
 };

@@ -12,6 +12,7 @@ export default function Header() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { isAuth, name } = useSelector((store: any) => store.user);
+	// const token = localStorage.getItem('userToken');
 
 	const logout = () => {
 		dispatch(logoutUserActionCreator());
@@ -20,7 +21,10 @@ export default function Header() {
 	};
 
 	useEffect(() => {
-		if (isAuth) store.dispatch(getCurrentUser());
+		if (isAuth) {
+			const user = getCurrentUser();
+			store.dispatch(user);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isAuth]);
 
@@ -31,7 +35,7 @@ export default function Header() {
 			<div>
 				{isAuth && (
 					<>
-						<span>{name}</span>
+						<span>{name || 'User'}</span>
 						<Button btnText='Logout' onClick={logout} />
 					</>
 				)}
