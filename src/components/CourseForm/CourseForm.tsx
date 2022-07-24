@@ -1,25 +1,34 @@
 import React, { useState } from 'react';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-import { Author } from '../../constants';
-import { formatCreationDate } from '../../helpers/formatCreationDate';
+import { Author, Course } from '../../constants';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import AuthorItem from './components/AuthorItem/AuthorItem';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { createAuthorActionCreator } from '../../store/authors/actions';
-import { addCourseActionCreator } from '../../store/courses/actions';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { addAuthor } from '../../store/authors/thunk';
+import { store } from '../../store';
+import { addCourse, updateCourse } from '../../store/courses/thunk';
 import './styles.scss';
 
 export default function CourseForm() {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const { courseId } = useParams();
+	const courses = useSelector((store: any) => store.courses);
+	const course = courses.find((c: Course) => c.id === courseId);
+
 	const allAuthors: Author[] = useSelector((state: any) => state.authors);
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
+	const [title, setTitle] = useState(courseId ? course.title : '');
+	const [description, setDescription] = useState(
+		courseId ? course.description : ''
+	);
 	const [authorName, setAuthorName] = useState('');
-	const [duration, setDuration] = useState<number>(0);
-	const [courseAuthors, setCourseAuthors] = useState<string[]>([]);
+	const [duration, setDuration] = useState<number>(
+		courseId ? course.duration : 0
+	);
+	const [courseAuthors, setCourseAuthors] = useState<string[]>(
+		courseId ? course.authors : []
+	);
 
 	const handleSubmit = () => {
 		if (
@@ -30,34 +39,35 @@ export default function CourseForm() {
 		) {
 			alert('Invalid input! Try again!');
 		} else {
-			const newCourse = {
-				id: generateId(),
-				title,
-				description,
-				duration,
-				authors: courseAuthors,
-				creationDate: formatCreationDate(new Date()),
-			};
-
-			dispatch(addCourseActionCreator(newCourse));
+			if (courseId) {
+				store.dispatch(
+					updateCourse({
+						id: courseId,
+						title,
+						description,
+						duration: Number(duration),
+						authors: courseAuthors,
+					})
+				);
+			} else {
+				store.dispatch(
+					addCourse({
+						title,
+						description,
+						duration: Number(duration),
+						authors: courseAuthors,
+					})
+				);
+			}
 			navigate('/courses');
 		}
-	};
-
-	const generateId = () => {
-		const id = Math.floor(Math.random() * 100 + 1);
-		return String(id);
 	};
 
 	const createAuthor = () => {
 		if (authorName.length < 2) {
 			alert('Author Name should be at least 2 characters long!');
 		} else {
-			const newAuthor: Author = {
-				id: generateId(),
-				name: authorName,
-			};
-			dispatch(createAuthorActionCreator(newAuthor));
+			store.dispatch(addAuthor(authorName));
 			setAuthorName('');
 		}
 	};
@@ -85,7 +95,7 @@ export default function CourseForm() {
 				<div>
 					<Button
 						type='button'
-						btnText='Create Course'
+						btnText={courseId ? 'Update Course' : 'Create Course'}
 						onClick={handleSubmit}
 					/>
 					<Button

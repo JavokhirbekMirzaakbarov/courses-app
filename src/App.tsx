@@ -48,6 +48,14 @@ function App() {
 								</PrivateRoute>
 							}
 						/>
+						<Route
+							path='/courses/update/:courseId'
+							element={
+								<PrivateRoute>
+									<CourseForm />
+								</PrivateRoute>
+							}
+						/>
 					</>
 				)}
 
