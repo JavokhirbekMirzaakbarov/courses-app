@@ -57,6 +57,17 @@ export const loginService = async (user: {
 	}
 };
 
+export const logoutService = async () => {
+	const res = await fetch('http://localhost:4000/logout', {
+		method: 'DELETE',
+		headers: {
+			Authorization: `${localStorage.getItem('userToken')}`,
+		},
+	});
+
+	return res;
+};
+
 export const getAllCoursesService = async () => {
 	const response = await fetch('http://localhost:4000/courses/all', {
 		method: 'GET',
@@ -93,6 +104,56 @@ export const getUserInfoService = async () => {
 	});
 
 	const data = await response.json();
-	console.log(localStorage.getItem('userToken'));
 	return data.result;
+};
+
+export const deleteCourseService = async (courseId: string) => {
+	const response = await fetch(`http://localhost:4000/courses/${courseId}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `${localStorage.getItem('userToken')}`,
+		},
+	});
+
+	return response;
+};
+
+export const addAuthorService = async (name: string) => {
+	const response = await fetch(`http://localhost:4000/authors/add`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `${localStorage.getItem('userToken')}`,
+		},
+		body: JSON.stringify({ name }),
+	});
+
+	return response;
+};
+
+export const addCourseService = async (newCourse: object) => {
+	const response = await fetch(`http://localhost:4000/courses/add`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `${localStorage.getItem('userToken')}`,
+		},
+		body: JSON.stringify(newCourse),
+	});
+
+	return response;
+};
+
+export const updateCourseService = async (course: any) => {
+	const response = await fetch(`http://localhost:4000/courses/${course.id}`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `${localStorage.getItem('userToken')}`,
+		},
+		body: JSON.stringify(course),
+	});
+
+	return response;
 };

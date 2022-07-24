@@ -6,7 +6,7 @@ export const authorsReducer = (state = [], action: any) => {
 			return [...action.payload.authors];
 		}
 		case CREATE_AUTHOR: {
-			return [...state, { ...action.payload.author }];
+			return [...state, action.payload.author];
 		}
 		default:
 			return state;
