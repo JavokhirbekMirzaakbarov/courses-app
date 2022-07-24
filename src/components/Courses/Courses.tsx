@@ -11,6 +11,7 @@ export default function Courses() {
 	const navigate = useNavigate();
 	const allCourses = useSelector((store: any) => store.courses);
 	const [searchResults, setSearchResults] = useState<Course[]>([]);
+	const role = useSelector((store: any) => store.user);
 
 	const searchCourse = (term: string) => {
 		setSearchResults(
@@ -26,11 +27,13 @@ export default function Courses() {
 		<div className='courses'>
 			<div className='search-area'>
 				<SearchBar searchCourse={searchCourse} />
-				<Button
-					type='button'
-					btnText='Add new course'
-					onClick={() => navigate('/courses/add')}
-				/>
+				{role === 'admin' && (
+					<Button
+						type='button'
+						btnText='Add new course'
+						onClick={() => navigate('/courses/add')}
+					/>
+				)}
 			</div>
 
 			{searchResults.length === 0
