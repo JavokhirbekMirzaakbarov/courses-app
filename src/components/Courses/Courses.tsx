@@ -11,7 +11,7 @@ export default function Courses() {
 	const navigate = useNavigate();
 	const allCourses = useSelector((store: any) => store.courses);
 	const [searchResults, setSearchResults] = useState<Course[]>([]);
-	const role = useSelector((store: any) => store.user);
+	const { role } = useSelector((store: any) => store.user);
 
 	const searchCourse = (term: string) => {
 		setSearchResults(
