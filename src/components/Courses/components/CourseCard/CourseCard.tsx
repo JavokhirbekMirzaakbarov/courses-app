@@ -22,7 +22,7 @@ export default function CourseCard(props: { course: Course }) {
 		navigate('/courses');
 	};
 	return (
-		<div className='course-card'>
+		<div className='course-card' data-testid='course'>
 			<div className='title'>
 				<h2>{props.course.title}</h2>
 				<p>{props.course.description}</p>

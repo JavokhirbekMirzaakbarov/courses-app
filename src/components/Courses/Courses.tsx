@@ -31,6 +31,7 @@ export default function Courses() {
 					<Button
 						type='button'
 						btnText='Add new course'
+						data-testid='add-new-course-button'
 						onClick={() => navigate('/courses/add')}
 					/>
 				)}

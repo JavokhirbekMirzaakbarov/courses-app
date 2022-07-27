@@ -81,7 +81,7 @@ export default function CourseForm() {
 	};
 
 	return (
-		<form className='container'>
+		<form className='container' data-testid='course-form'>
 			<div className='title-area'>
 				<div>
 					<Input

@@ -12,6 +12,7 @@
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
     "crypto-browserify": "^3.12.0",
+    "jest": "^28.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
@@ -34,7 +35,7 @@
     "eslint:fix": "eslint --fix --ext .ts --ext .tsx src",
     "test:nowatch": "react-scripts test --watchAll=false",
     "prepare": "husky install",
-    "prepublish": "npm run eslint:fix"
+    "prepublish": "npm run eslint:fix && npm run test:nowatch"
   },
   "eslintConfig": {
     "extends": [
